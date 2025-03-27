@@ -23,7 +23,9 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
 
       - name: Install dependencies
         run: npm install
@@ -31,5 +33,5 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Deploy (Optional)
+      - name: Deploy 
         run: echo "Deployment step goes here"
