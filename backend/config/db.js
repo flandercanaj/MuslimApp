@@ -1,6 +1,12 @@
-// config/db.js
+require('dotenv').config();
 const mongoose = require('mongoose');
-const uri = process.env.MONGO_URI || "mongodb://localhost:27017/MuslimWeb";
+
+const uri = process.env.DATABASE_URL;
+
+if (!uri) {
+  console.error("MongoDB URI is missing. Set DATABASE_URL in environment variables.");
+  process.exit(1);
+}
 
 mongoose.connect(uri, {
   useNewUrlParser: true,

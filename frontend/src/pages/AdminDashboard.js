@@ -8,7 +8,7 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/admin/users', {
+      const response = await fetch('http://localhost:5002/api/admin/users', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
     try {
       const token = localStorage.getItem('authToken'); // Get token for authorization
       
-      const response = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+      const response = await fetch(`http://localhost:5002/api/admin/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

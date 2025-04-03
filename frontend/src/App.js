@@ -6,7 +6,6 @@ import LoginPage from "./pages/LoginPage";
 import AdminDashboard from './pages/AdminDashboard';
 import MainPage from "./pages/mainPage";
 import RegisterPage from "./pages/RegisterPage";
-import UniversitiesPage from './pages/UniversitiesPage'; // Correct import path
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -44,11 +43,6 @@ function App() {
           element={user && user.role === "user" ? <MainPage /> : <Navigate to="/login" />} 
         />
 
-        {/* Added Universities Page Route */}
-        <Route 
-          path="/universities" 
-          element={user ? <UniversitiesPage /> : <Navigate to="/login" />} 
-        />
       </Routes>
     </Router>
   );

@@ -1,31 +1,36 @@
-name: Deploy MuslimApp
+name: CI/CD 
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
+    paths:
+      - 'monitoring/prometheus.yml'
+      - 'monitoring/docker-compose.yml'
     branches:
       - main
 
 jobs:
-  build:
+  deploy-services:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    - name: Pull Latest Changes
+      run: git pull origin main
 
-      - name: Install dependencies
-        run: npm install
+    - name: Build and Push Prometheus Image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/muslimapp-prometheus:latest ./monitoring
+        docker push ${{ secrets.DOCKER_USERNAME }}/muslimapp-prometheus:latest
 
-      - name: Run tests
-        run: npm test
-
-      - name: Deploy (Optional)
-        run: echo "Deployment step goes here"
+    - name: Deploy Updated Services
+      run: |
+        ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd /path/to/project
+          git pull origin main
+          export MONGO_URI=${{ secrets.MONGO_URI }}
+          docker-compose down prometheus
+          docker-compose pull prometheus
+          docker-compose up -d prometheus
+        EOF
